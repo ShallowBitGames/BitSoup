@@ -1,0 +1,19 @@
+{
+  "potion": {
+    "ID" : "base_potion",
+    "name": "Strange Potion",
+    "requirements": [
+      {
+        "ingredient": "red_essence",
+        "min": 1,
+        "max": 9
+
+      },
+      {
+        "ingredient": "MISC",
+        "min": -1,
+        "max": -1
+      }
+    ]
+  }
+}

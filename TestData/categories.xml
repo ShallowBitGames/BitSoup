@@ -1,0 +1,7 @@
+<Category id="CATEGORY">
+	<Category id="POTION"/>
+	<Category id="HERB"/>
+	<Category id="STRANGE">
+		<Category id="POWDER"/>
+	</Category>
+</Category>
