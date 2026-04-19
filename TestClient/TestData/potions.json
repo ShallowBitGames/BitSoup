@@ -1,0 +1,47 @@
+{
+  "base_potion": {
+    "name": "Strange Potion",
+    "requirements": [
+      {
+        "ingredient": "red_essence",
+        "amount": 1
+      },
+      {
+        "ingredient": "blue_essence",
+        "amount": 1
+      }
+    ]
+  },
+  "dumplings": {
+    "name": "[0] Dumplings",
+    "requirements": [
+      {
+        "category": "basic",
+        "amount": 1
+      },
+      {
+        "category": "staple",
+        "amount": 1
+      }
+    ]
+  },
+  "chunk": {
+    ""
+  },
+  "sandwich": {
+    "name": "[0]-[1] Sandwich",
+    "requirements": [
+      {
+        "category": "solid",
+        "amount": 1
+      },
+      {
+        "category": "solid",
+        "amount":  1
+      }
+    ]
+  },
+  "stew": {
+
+  }
+}

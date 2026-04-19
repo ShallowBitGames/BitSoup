@@ -1,11 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using BitSoup.Recipe;
-using BitSoup.RecipeTree;
+﻿// See https://aka.ms/new-console-template for more information
+using BitSoup;
+using System.Xml;
+
+Console.WriteLine("Hello, World! Let's get cooking!");
+
+const string categoriesPath = "TestData/categories.xml";
+const string ingredientsPath = "TestData/";
+const string recipesPath = "TestData/potions.json";
+
+XmlDocument CategoryXml = ;
+
+
+while (true)
+{
+    Console.WriteLine("SELECT: [1] Cook,  [2] Print Data, [3] Choose different files, [ESC] Exit");
+
+    char pressedkey = Console.ReadKey().KeyChar;
+
+    switch (pressedkey)
+    {
+        case '1':
+            break;
+        
+        case '2':
+            break;
+        
+        case '3':
+            break;
+
+        case ((char)ConsoleKey.Escape):
+            return;
+    }
+}
 
 string path { get; set; } = "";
 Recipe<string> tea = new("Tea");
