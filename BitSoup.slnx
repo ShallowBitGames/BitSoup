@@ -4,6 +4,6 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="../BitSoup/BitSoup/BitSoup.csproj" />
-  <Project Path="../BitSoup/TestClient/TestClient.csproj" Id="05502b45-e8f8-41f5-ad39-5ee1c632df62" />
+    <Project Path="BitSoup/BitSoup.csproj" />
+    <Project Path="TestClient/TestClient.csproj" />
 </Solution>
