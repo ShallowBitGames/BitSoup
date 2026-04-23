@@ -1,12 +1,12 @@
 namespace BitSoup;
 
-internal struct Requirement<ID> where ID : IEquatable<ID>
+internal struct Requirement
 {
-    internal ID ingredient { get; }
+    internal Ingredient ingredient { get; }
     internal int min_required { get; set; }
     internal int max_optional { get; set; }
 
-    public Requirement(ID ingredient, int min_required, int max_optional)
+    public Requirement(Ingredient ingredient, int min_required, int max_optional)
     {
         this.ingredient = ingredient;
         this.min_required = min_required;

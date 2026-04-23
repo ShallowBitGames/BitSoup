@@ -3,43 +3,41 @@ using System.Xml;
 
 namespace BitSoup;
 
-internal class CategoryTree<ID> where ID : IConvertible
+internal class CategoryTree
 {
-    private Dictionary<ID, List<ID>> categoryAncestorDict = new();
+    private Dictionary<Category, List<Category>> categoryAncestorDict = new();
 
     public CategoryTree(XmlNode root)
     {
         if (root != null)
-            readNode(root, new List<ID>());
+            readNode(root, new List<Category>());
     }
 
     // adds hierarchy information
     // avoids double entries
-    void addToCategories(ID id, List<ID> parentCategories)
+    void addToCategories(Category category, List<Category> parentCategories)
     {
         // sibling nodes can share a list, they have the same ancestors
-        if (!categoryAncestorDict.ContainsKey(id))
-            categoryAncestorDict.Add(id, parentCategories);
+        if (!categoryAncestorDict.ContainsKey(category))
+            categoryAncestorDict.Add(category, parentCategories);
         else
         {
-            foreach (ID category in parentCategories)
-                if (!categoryAncestorDict[id].Contains(category))
-                    categoryAncestorDict[id].Add(category);
+            foreach (Category cat in parentCategories)
+                if (!categoryAncestorDict[category].Contains(category))
+                    categoryAncestorDict[category].Add(category);
         }
     }
 
-    void readNode(XmlNode node, List<ID> parentCategories)
+    void readNode(XmlNode node, List<Category> parentCategories)
     {
 
         // !!!
-        // For this to work, the type of ID must be something
+        // For this to work, the type of Category must be something
         // that can internally be constructed from a string
-        string idAttr = ((XmlElement)node).GetAttribute("id");
-        ID id = (ID)Convert.ChangeType(idAttr, typeof(ID));
 
         addToCategories(id, parentCategories);
 
-        List<ID> newParents = new List<ID>(parentCategories);
+        List<Category> newParents = new List<Category>(parentCategories);
         newParents.Add(id);
         if (node.HasChildNodes)
             foreach (XmlNode childNode in node.ChildNodes)
@@ -53,7 +51,7 @@ internal class CategoryTree<ID> where ID : IConvertible
         foreach (var pair in categoryAncestorDict)
         {
             sb.Append(pair.Key.ToString() + " is a: ");
-            foreach (ID parent_category in pair.Value)
+            foreach (Category parent_category in pair.Value)
                 sb.Append(parent_category + ", ");
 
             sb.Remove(sb.Length - 2, 2);

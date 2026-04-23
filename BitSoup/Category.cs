@@ -1,0 +1,6 @@
+namespace BitSoup;
+
+class Category
+{
+    
+}

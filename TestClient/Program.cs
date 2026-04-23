@@ -8,8 +8,6 @@ const string categoriesPath = "TestData/categories.xml";
 const string ingredientsPath = "TestData/";
 const string recipesPath = "TestData/potions.json";
 
-XmlDocument CategoryXml = ;
-
 
 while (true)
 {
@@ -33,6 +31,7 @@ while (true)
     }
 }
 
+/*
 string path { get; set; } = "";
 Recipe<string> tea = new("Tea");
 tea.AddRequirement("Water", 1, 3);
@@ -87,3 +86,4 @@ Console.Write(rt.ToString());
 
 Categories<string> cats = new(path + "categories.xml");
 Console.WriteLine(cats.ToString());
+*/

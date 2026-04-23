@@ -4,21 +4,21 @@ using System.Text.Json;
 
 namespace BitSoup;
 
-public class RecipeTree<ID> where ID : IEquatable<ID>
+public class RecipeTree
 {
-    Node<ID> Root { get; set; }
+    RecipeNode Root { get; set; }
 
-    public RecipeTree(Recipe<ID> rootRec)
+    public RecipeTree(Recipe rootRec)
     {
-        Root = new Node<ID>(rootRec);
+        Root = new RecipeNode(rootRec);
         Root.Parent = null;
-        Root.Children = new List<Node<ID>>();
+        Root.Children = new List<RecipeNode>();
     }
 
     //
-    private Node<ID> createNode(Recipe<ID> rec, Node<ID> baseNode)
+    private RecipeNode createNode(Recipe rec, RecipeNode baseNode)
     {
-        Node<ID> newNode = new Node<ID>(rec);
+        RecipeNode newNode = new RecipeNode(rec);
         newNode.Parent = baseNode;
         newNode.Children = new();
 
@@ -27,7 +27,7 @@ public class RecipeTree<ID> where ID : IEquatable<ID>
         return newNode;
     }
 
-    public bool AddNode(Recipe<ID> rec)
+    public bool AddNode(Recipe rec)
     {
         // root sets the base conditions for this tree
         if (!(rec < Root.Recipe))
@@ -39,12 +39,12 @@ public class RecipeTree<ID> where ID : IEquatable<ID>
 
     }
 
-    internal Node<ID> SinkNode(Recipe<ID> rec, Node<ID> baseNode)
+    internal RecipeNode SinkNode(Recipe rec, RecipeNode baseNode)
     {
 
         // try to sink below first possible child
         // !! child order may change result 
-        foreach (Node<ID> child in baseNode.Children)
+        foreach (RecipeNode child in baseNode.Children)
         {
             if (rec < child.Recipe)
                 return SinkNode(rec, child);
@@ -55,19 +55,19 @@ public class RecipeTree<ID> where ID : IEquatable<ID>
         // 2. insert new node between them and baseNode
         // also includes the case when baseNode is a leaf
 
-        List<Node<ID>> smallerChildren = new();
+        List<RecipeNode> smallerChildren = new();
 
         // collect children that are more specific
-        foreach (Node<ID> child in baseNode.Children)
+        foreach (RecipeNode child in baseNode.Children)
             if (child.Recipe < rec)
                 smallerChildren.Add(child);
 
 
         // create new node
-        Node<ID> newNode = createNode(rec, baseNode);
+        RecipeNode newNode = createNode(rec, baseNode);
 
         // reparent children
-        foreach (Node<ID> child in smallerChildren)
+        foreach (RecipeNode child in smallerChildren)
         {
             baseNode.Children.Remove(child);
             child.Parent = newNode;
@@ -84,17 +84,17 @@ public class RecipeTree<ID> where ID : IEquatable<ID>
         return Root.ToString("--", 0);
     }
 
-    public Recipe<ID> Match(ID[] ingredients)
+    public Recipe Match(Ingredient[] ingredients)
     {
         return MatchBelow(ingredients, Root);
     }
 
-    private Recipe<ID>? MatchBelow(ID[] ingredients, Node<ID> baseNode)
+    private Recipe? MatchBelow(Ingredient[] ingredients, RecipeNode baseNode)
     {
         if (!baseNode.Recipe.MatchesIngredients(ingredients))
             return null;
 
-        foreach (Node<ID> child in baseNode.Children)
+        foreach (RecipeNode child in baseNode.Children)
         {
             if (child.Recipe.MatchesIngredients(ingredients))
                 return child.Recipe;
@@ -103,17 +103,4 @@ public class RecipeTree<ID> where ID : IEquatable<ID>
         return baseNode.Recipe;
     }
 
-
-    //string serializeDown()
-    //{
-
-
-    //}
-
-    //public bool writeRecipesToJSON(string path)
-    //{
-    //    foreach 
-    //        FileStream fstream = File.Create(path + "");
-    //        JsonSerializer.SerializeAsync()
-    //}
 }

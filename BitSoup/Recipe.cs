@@ -1,16 +1,15 @@
 namespace BitSoup;
 
-public class Recipe<ID> where ID : IEquatable<ID>
+public class Recipe(string key, string name)
 {
+    public string Key { get; } = key;
+    public string Name { get; } = name;
+    internal List<Requirement> Requirements = [];
 
-    ID Name;
-    internal List<Requirement<ID>> Requirements = [];
 
-    public Recipe(ID name) { Name = name; }
-
-    public void AddRequirement(ID ingredient, int min_required, int max_optional)
+    public void AddRequirement(Ingredient ingredient, int min_required, int max_optional)
     {
-        Requirements.Add(new Requirement<ID>(ingredient, min_required, max_optional));
+        Requirements.Add(new Requirement(ingredient, min_required, max_optional));
     }
 
 
