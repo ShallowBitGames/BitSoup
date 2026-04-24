@@ -7,27 +7,27 @@ public class Recipe(string key, string name)
     internal List<Requirement> Requirements = [];
 
 
-    public void AddRequirement(Ingredient ingredient, int min_required, int max_optional)
+    public void AddRequirement(Ingredient ingredient, int MinRequired, int MaxOptional)
     {
-        Requirements.Add(new Requirement(ingredient, min_required, max_optional));
+        Requirements.Add(new Requirement(ingredient, MinRequired, MaxOptional));
     }
 
 
     // a is smaller than b iff
     // requirements of a fulfilled => requirements of b fulfilled
     // check if each of b's requirements fits into a's requirements
-    public static bool operator <(Recipe<ID> lh, Recipe<ID> rh)
+    public static bool operator <(Recipe lh, Recipe rh)
     {
 
-        List<Requirement<ID>> remainingLH = new(lh.Requirements);
+        List<Requirement> remainingLH = new(lh.Requirements);
 
-        foreach (Requirement<ID> required_rh in rh.Requirements)
+        foreach (Requirement required_rh in rh.Requirements)
         {
 
-            int matchID = remainingLH.FindIndex(required_lh => EqualityComparer<ID>.Default.Equals(required_rh.ingredient, required_lh.ingredient));
+            int matchID = remainingLH.FindIndex(required_lh => EqualityComparer<string>.Default.Equals(required_rh.Ingredient.Key, required_lh.Ingredient.Key));
             if (matchID == -1)
             {
-                if (required_rh.min_required > 0)
+                if (required_rh.MinRequired > 0)
                     return false;
 
                 // add a new matching requirement
@@ -38,16 +38,16 @@ public class Recipe(string key, string name)
 
             var match = remainingLH[matchID];
 
-            if (match.min_required < required_rh.min_required)
+            if (match.MinRequired < required_rh.MinRequired)
                 return false;
 
-            //if (match.max_optional > required_rh.max_optional)
+            //if (match.MaxOptional > required_rh.MaxOptional)
             //    return false;
 
             // not quite correct yet
             // but working on constrained examples
-            match.min_required += required_rh.min_required;
-            match.max_optional -= required_rh.max_optional;
+            match.MinRequired += required_rh.MinRequired;
+            match.MaxOptional -= required_rh.MaxOptional;
 
             remainingLH[matchID] = match;
 
@@ -57,7 +57,7 @@ public class Recipe(string key, string name)
 
     }
 
-    public static bool operator >(Recipe<ID> lh, Recipe<ID> rh)
+    public static bool operator >(Recipe lh, Recipe rh)
     {
         return rh < lh;
     }
@@ -78,19 +78,19 @@ public class Recipe(string key, string name)
 
 
     // TODO: implement recipe-ingredient match
-    public bool MatchesIngredients(ID[] ingredients)
+    public bool MatchesIngredients(Ingredient[] ingredients)
     {
-        List<ID> ingredientsLeft = new(ingredients);
+        List<Ingredient> ingredientsLeft = new(ingredients);
 
-        foreach (Requirement<ID> req in Requirements)
+        foreach (Requirement req in Requirements)
         {
             bool fulfilled = req.TakeAllRequired(ingredientsLeft);
 
             if (!fulfilled)
                 return false;
 
-            return true;
         }
+        return true;
     }
 
 

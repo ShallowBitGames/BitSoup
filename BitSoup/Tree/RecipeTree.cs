@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System.ComponentModel.Design.Serialization;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Xml;
 
 namespace BitSoup;
 
-public class RecipeTree
+internal class RecipeTree
 {
     RecipeNode Root { get; set; }
 
@@ -14,6 +16,7 @@ public class RecipeTree
         Root.Parent = null;
         Root.Children = new List<RecipeNode>();
     }
+
 
     //
     private RecipeNode createNode(Recipe rec, RecipeNode baseNode)
@@ -101,6 +104,12 @@ public class RecipeTree
         }
 
         return baseNode.Recipe;
+    }
+
+    internal static RecipeTree Build(CategoryTree categoryTree, List<Ingredient> ingredients, List<Recipe> recipes)
+    {
+        Recipe r = new Recipe("empty", "placeholder");
+        return new RecipeTree(r);
     }
 
 }

@@ -4,20 +4,9 @@ using System.Xml;
 
 namespace BitSoup;
 
-public class Cooker(string categoryXmlPath, string ingredientJsonPath, string recipeJsonPath)
+public class Cooker
 {
-    public RecipeTree RecipeTree { get; private set; }
-
-    private string _categoryXmlPath = categoryXmlPath;
-    private string _ingredientJsonPath = ingredientJsonPath;
-    private string _recipeJsonPath = recipeJsonPath;
-    private bool _loaded = false;
-
-    private async void Load()
-    {
-        
-        
-    }
+    private RecipeTree _recipeTree;
 
     public Cooker(XmlDocument categoryXml, JsonDocument ingredientJson, JsonDocument recipeJson)
     {
@@ -25,7 +14,7 @@ public class Cooker(string categoryXmlPath, string ingredientJsonPath, string re
         List<Ingredient> ingredients = LoadIngredients(ingredientJson);
         List<Recipe> recipes = LoadRecipes(recipeJson);
         
-        RecipeTree = RecipeTree.Build(categories, ingredients, recipes);
+        _recipeTree = RecipeTree.Build(categoryTree, ingredients, recipes);
     }
 
     private CategoryTree LoadCategories(XmlDocument xmlDocument)
