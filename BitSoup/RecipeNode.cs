@@ -1,12 +1,12 @@
 namespace BitSoup;
 
-internal class RecipeNode<ID> where ID : IEquatable<ID>
+internal class RecipeNode
 {
-    public Recipe<ID> Recipe { get; }
-    public RecipeNode<ID> Parent { get; set; }
-    public List<RecipeNode<ID>> Children { get; set; }
+    public Recipe Recipe { get; }
+    public RecipeNode Parent { get; set; }
+    public List<RecipeNode> Children { get; set; }
 
-    internal RecipeNode(Recipe<ID> recipe) { Recipe = recipe; }
+    internal RecipeNode(Recipe recipe) { Recipe = recipe; }
 
     public string ToString(string symbol, int level)
     {
