@@ -8,8 +8,6 @@ const string categoriesPath = "TestData/categories.xml";
 const string ingredientsPath = "TestData/";
 const string recipesPath = "TestData/potions.json";
 
-XmlDocument CategoryXml = ;
-
 
 while (true)
 {

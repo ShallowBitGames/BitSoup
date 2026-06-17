@@ -3,20 +3,41 @@ namespace BitSoup;
 public class Recipe<ID> where ID : IEquatable<ID>
 {
 
-    ID Name;
-    internal List<Requirement<ID>> Requirements = [];
+    public ID Id { get; set; }
+    public string Name { get; set; }
 
-    public Recipe(ID name) { Name = name; }
+    public List<Requirement<ID>> Requirements = [];
 
-    public void AddRequirement(ID ingredient, int min_required, int max_optional)
+    public Recipe(ID id, string name)
     {
-        Requirements.Add(new Requirement<ID>(ingredient, min_required, max_optional));
+        Id = id;
+        Name = name;
     }
 
+    public void AddIngredientRequirement(Ingredient<ID> ingredient, int minimumRequired, int maximumOptional)
+    {
+        Requirements.Add(new IngredientRequirement<ID>(ingredient, minimumRequired, maximumOptional));
+    }
+
+    // If all requirements of the passed recipe are fulfilled,
+    // all requirements of this recipe are also fulfilled
+    public bool IsSpecializationOf(Recipe<ID> recipe)
+    {
+        // Copy requirements in order to 
+        List<Requirement<ID>> remaining = Requirements;
+
+        foreach(var requirement in recipe.Requirements)
+        {
+            // TODO
+        }
+
+        return true;
+    }
 
     // a is smaller than b iff
     // requirements of a fulfilled => requirements of b fulfilled
     // check if each of b's requirements fits into a's requirements
+    /*
     public static bool operator <(Recipe<ID> lh, Recipe<ID> rh)
     {
 
@@ -28,7 +49,7 @@ public class Recipe<ID> where ID : IEquatable<ID>
             int matchID = remainingLH.FindIndex(required_lh => EqualityComparer<ID>.Default.Equals(required_rh.ingredient, required_lh.ingredient));
             if (matchID == -1)
             {
-                if (required_rh.min_required > 0)
+                if (required_rh.MinimumRequired > 0)
                     return false;
 
                 // add a new matching requirement
@@ -39,7 +60,7 @@ public class Recipe<ID> where ID : IEquatable<ID>
 
             var match = remainingLH[matchID];
 
-            if (match.min_required < required_rh.min_required)
+            if (match.MinimumRequired < required_rh.MinimumRequired)
                 return false;
 
             //if (match.max_optional > required_rh.max_optional)
@@ -47,8 +68,8 @@ public class Recipe<ID> where ID : IEquatable<ID>
 
             // not quite correct yet
             // but working on constrained examples
-            match.min_required += required_rh.min_required;
-            match.max_optional -= required_rh.max_optional;
+            match.MinimumRequired += required_rh.MinimumRequired;
+            match.MaximumOptional -= required_rh.MaximumOptional;
 
             remainingLH[matchID] = match;
 
@@ -62,7 +83,7 @@ public class Recipe<ID> where ID : IEquatable<ID>
     {
         return rh < lh;
     }
-
+    */
 
     public override string ToString()
     {
@@ -76,47 +97,4 @@ public class Recipe<ID> where ID : IEquatable<ID>
         return s;
     }
 
-
-
-    // TODO: implement recipe-ingredient match
-    public bool MatchesIngredients(ID[] ingredients)
-    {
-        List<ID> ingredientsLeft = new(ingredients);
-
-        foreach (Requirement<ID> req in Requirements)
-        {
-            bool fulfilled = req.TakeAllRequired(ingredientsLeft);
-
-            if (!fulfilled)
-                return false;
-
-            return true;
-        }
-    }
-
-
-    /*
-     * (score, recipe) bestmatch = root
-     * stack = root
-     * 
-     * while stack not empty:
-     *   node = stack.pop
-     *   bestmatch = node.match(ref stack, bestmatch)
-     * 
-     * return bestmatch.recipe
-     */
-
-    /*
-     * 
-     * for every child:
-     *   matches:
-     *      push on stack
-     *   
-     * score = calculate match score
-     * if score > bestmatch.score:
-     *   return (score, this)
-     * 
-     * return bestmatch
-     * 
-     */
 }
