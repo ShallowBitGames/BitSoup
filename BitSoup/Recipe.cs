@@ -21,14 +21,26 @@ public class Recipe<ID> where ID : IEquatable<ID>
 
     // If all requirements of the passed recipe are fulfilled,
     // all requirements of this recipe are also fulfilled
+    // for now: only check for identical requirements, use each requirement once max
     public bool IsSpecializationOf(Recipe<ID> recipe)
     {
         // Copy requirements in order to 
-        List<Requirement<ID>> remaining = Requirements;
+        List<Requirement<ID>> remaining = new List<Requirement<ID>>(recipe.Requirements);
 
-        foreach(var requirement in recipe.Requirements)
+        foreach(var thisRequirement in this.Requirements)
         {
-            // TODO
+            bool found = false;
+            foreach(var generalRequirement in remaining)
+            {
+                if (generalRequirement.Contains(thisRequirement))
+                {
+                    remaining.Remove(generalRequirement);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                return false;
         }
 
         return true;
